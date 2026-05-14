@@ -1,17 +1,24 @@
 import { useEffect, useState } from 'react';
-import type { Tournament } from '../types';
 
 interface Props {
   imageUrl: string;
   blob: Blob;
-  tournament: Tournament;
+  filename?: string;
+  shareTitle?: string;
+  shareText?: string;
   onClose: () => void;
 }
 
 /** Share modal — preview the generated PNG + native share OR download. */
-export function ShareModal({ imageUrl, blob, tournament: _tournament, onClose }: Props) {
+export function ShareModal({
+  imageUrl,
+  blob,
+  filename = `10iscore-${new Date().toISOString().slice(0, 10)}.png`,
+  shareTitle = 'Tournament Leaderboard',
+  shareText = 'Final standings from our tennis tournament 🎾',
+  onClose,
+}: Props) {
   const [status, setStatus] = useState<'shared' | 'downloaded' | null>(null);
-  const filename = `10iscore-tournament-${new Date().toISOString().slice(0, 10)}.png`;
 
   const canShareFiles =
     typeof navigator !== 'undefined' &&
@@ -31,8 +38,8 @@ export function ShareModal({ imageUrl, blob, tournament: _tournament, onClose }:
       const file = new File([blob], filename, { type: 'image/png' });
       await navigator.share({
         files: [file],
-        title: 'Tournament Leaderboard',
-        text: 'Final standings from our tennis tournament 🎾',
+        title: shareTitle,
+        text: shareText,
       });
       setStatus('shared');
     } catch {

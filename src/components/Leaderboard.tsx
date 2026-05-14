@@ -103,7 +103,9 @@ export function Leaderboard({ tournament, standings, onNew, onHome }: Props) {
         <ShareModal
           imageUrl={shareState.url}
           blob={shareState.blob}
-          tournament={tournament}
+          filename={`10iscore-tournament-${new Date().toISOString().slice(0, 10)}.png`}
+          shareTitle="Tournament Leaderboard"
+          shareText="Final standings from our tennis tournament 🎾"
           onClose={closeShare}
         />
       )}
